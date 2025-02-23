@@ -35,3 +35,15 @@ export function getFolders(folderId: number) {
 export function getFiles(folderId: number) {
   return db.select().from(filesSchema).where(eq(filesSchema.parent, folderId));
 }
+
+export async function createFile(input: {
+  file: {
+    name: string;
+    size: number;
+    url: string;
+  };
+  userId: string;
+}) {
+  const updatedFile = { ...input.file, size: input.file.size.toString() };
+  return await db.insert(filesSchema).values({ ...updatedFile, parent: 1 });
+}
